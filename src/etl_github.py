@@ -48,15 +48,26 @@ def github_get(url, params=None):
     Helper function to GET data from GitHub API with basic error handling.
     Implements simple retry logic in case of temporary errors or rate limits.
     """
-    max_retries = 3
-    for attempt in range(max_retries):
-        response = requests.get(url, headers=HEADERS, params=params)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            print(f"Warning: Failed to fetch {url} (status {response.status_code}), retry {attempt+1}/{max_retries}")
-            time.sleep(2)  # wait before retry
-    return []  # Return empty list if all retries fail
+    all_data = []
+    page = 1
+    while True:
+        p = params.copy() if params else {}
+        p["per_page"] = 100
+        p["page"] = page
+
+        response = requests.get(url, headers=HEADERS, params=p)
+        if response.status_code != 200:
+            print(f"Error fetching {url}: {response.status_code} - {response.text}")
+            break
+
+        data = response.json()
+        if not data:  # stop when empty
+            break
+
+        all_data.extend(data)
+        page += 1
+
+    return all_data
 
 def df_to_postgres(df, table_name):
     """
@@ -65,15 +76,16 @@ def df_to_postgres(df, table_name):
     if df.empty:
         print(f"No data to insert for table {table_name}. Skipping.")
         return
-    df.to_sql(table_name, engine, if_exists="append", index=False)
+    df.to_sql(table_name, engine, if_exists="replace", index=False)
     print(f"Inserted {len(df)} rows into table {table_name}.")
 
 # =========================================================
 # 3. EXTRACT: REPOSITORIES
 # =========================================================
 
-repos_url = f"https://api.github.com/users/{GITHUB_USERNAME}/repos?per_page=100"
+repos_url = f"https://api.github.com/users/{GITHUB_USERNAME}/repos"
 repos_data = github_get(repos_url)
+
 
 # Transform repositories data
 projects_df = pd.DataFrame(repos_data)
