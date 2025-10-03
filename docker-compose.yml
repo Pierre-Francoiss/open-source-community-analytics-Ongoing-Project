@@ -1,11 +1,10 @@
-version: '3.8'
 services:
   postgres:
     image: postgres:15
     container_name: community_postgres
     environment:
       POSTGRES_USER: community_user
-      POSTGRES_PASSWORD: Userpass
+      POSTGRES_PASSWORD: 5432i
       POSTGRES_DB: community_analytics
 
     ports:
