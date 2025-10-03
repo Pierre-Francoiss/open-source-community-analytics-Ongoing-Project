@@ -5,7 +5,7 @@ services:
     container_name: community_postgres
     environment:
       POSTGRES_USER: community_user
-      POSTGRES_PASSWORD: your_password
+      POSTGRES_PASSWORD: yourpassword
       POSTGRES_DB: community_analytics
     ports:
       - "5432:5432"
