@@ -1,14 +1,14 @@
-"""
-etl_github.py
---------------
-ETL script for Open Source Community Analytics project.
 
-This script demonstrates:
-- Extraction of data from GitHub API (repositories, contributors, issues, pull requests)
-- Transformation of data to match PostgreSQL schema
-- Loading data into PostgreSQL database
-- Basic error handling and logging
-"""
+#etl_github.py
+#--------------
+#ETL script for Open Source Community Analytics project.
+
+#This script demonstrates:
+#- Extraction of data from GitHub API (repositories, contributors, issues, pull requests)
+#- Transformation of data to match PostgreSQL schema
+#- Loading data into PostgreSQL database
+#- Basic error handling and logging
+
 
 import requests
 import pandas as pd
@@ -44,10 +44,10 @@ HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 # =========================================================
 
 def github_get(url, params=None):
-    """
-    Helper function to GET data from GitHub API with basic error handling.
-    Implements simple retry logic in case of temporary errors or rate limits.
-    """
+    
+    #Helper function to GET data from GitHub API with basic error handling.
+    #Implements simple retry logic in case of temporary errors or rate limits.
+    
     all_data = []
     page = 1
     while True:
@@ -70,9 +70,9 @@ def github_get(url, params=None):
     return all_data
 
 def df_to_postgres(df, table_name):
-    """
-    Insert a Pandas DataFrame into a PostgreSQL table using SQLAlchemy.
-    """
+    
+     #Insert a Pandas DataFrame into a PostgreSQL table using SQLAlchemy.
+    
     if df.empty:
         print(f"No data to insert for table {table_name}. Skipping.")
         return
@@ -172,6 +172,6 @@ df_to_postgres(prs_df, "pull_requests")
 # =========================================================
 # 7. NOTES / NEXT STEPS
 # =========================================================
-"""
-- This script can be extended to include more data points (e.g., comments, reviews).
-"""
+
+#- This script can be extended to include more data points (e.g., comments, reviews).
+

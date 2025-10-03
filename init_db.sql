@@ -1,6 +1,6 @@
 -- =========================================================
 -- init_db.sql
--- Database for Open Source Community Analytics intialisation
+-- Database for Open Source Community Analytics
 -- =========================================================
 
 -- Table for GitHub projects
