@@ -7,6 +7,9 @@ services:
       POSTGRES_USER: community_user
       POSTGRES_PASSWORD: Userpass
       POSTGRES_DB: community_analytics
+      LANG: en_US.utf8
+      LC_ALL: en_US.utf8
+
     ports:
       - "5432:5432"
     volumes:

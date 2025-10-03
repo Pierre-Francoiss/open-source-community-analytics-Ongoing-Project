@@ -35,6 +35,9 @@ POSTGRES_PORT = 5432
 encoded_user = quote_plus(POSTGRES_USER)
 encoded_password = quote_plus(POSTGRES_PASSWORD)
 print(f"Encoded user: {encoded_user}, Encoded password: {encoded_password}")
+for c in POSTGRES_USER + POSTGRES_PASSWORD + POSTGRES_DB:
+    print(ord(c), c)
+
 
 # Create SQLAlchemy engine
 engine = create_engine(
