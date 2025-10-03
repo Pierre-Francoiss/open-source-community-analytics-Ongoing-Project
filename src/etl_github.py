@@ -32,11 +32,12 @@ POSTGRES_PORT = 5432
 # Create SQLAlchemy engine for connection
 
 # Encode password safely 
+encoded_user = quote_plus(POSTGRES_USER)
 encoded_password = quote_plus(POSTGRES_PASSWORD)
 
 # Create SQLAlchemy engine
 engine = create_engine(
-    f"postgresql+psycopg2://{POSTGRES_USER}:{encoded_password}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}",
+    f"postgresql+psycopg2://{encoded_user}:{encoded_password}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}",
     client_encoding="utf8"  # Assure que psycopg2 communique en UTF-8
 )
 
