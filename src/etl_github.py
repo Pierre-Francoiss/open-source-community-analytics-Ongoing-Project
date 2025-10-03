@@ -24,7 +24,7 @@ from urllib.parse import quote_plus
 
 # PostgreSQL connection
 POSTGRES_USER = "community_user"
-POSTGRES_PASSWORD = "5432i"
+POSTGRES_PASSWORD = "Userpass"
 POSTGRES_DB = "community_analytics"
 POSTGRES_HOST = "host.docker.internal"
 POSTGRES_PORT = 5432
