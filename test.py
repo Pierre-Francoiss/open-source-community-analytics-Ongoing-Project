@@ -4,7 +4,7 @@ try:
     conn = psycopg2.connect(
         dbname="community_analytics",
         user="community_user",
-        password="5342i",
+        password="5432i",
         host="host.docker.internal",
         port=5432,
     )
