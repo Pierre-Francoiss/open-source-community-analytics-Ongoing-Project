@@ -32,7 +32,11 @@ POSTGRES_PORT = 5432
 
 engine = create_engine(
     f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}",
-    connect_args={"options": "-c client_encoding=UTF8"}
+    connect_args={
+        "options": "-c client_encoding=UTF8",
+        "client_encoding": "utf8"
+    },
+    encoding='utf-8'
 )
 
 # GitHub API configuration
