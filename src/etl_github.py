@@ -29,8 +29,10 @@ POSTGRES_HOST = "localhost"
 POSTGRES_PORT = 5432
 
 # Create SQLAlchemy engine for connection
+
 engine = create_engine(
-    f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+    f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}",
+    connect_args={"options": "-c client_encoding=UTF8"}
 )
 
 # GitHub API configuration
