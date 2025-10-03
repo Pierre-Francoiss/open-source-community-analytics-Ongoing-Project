@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    container_name: community_postgres
+    environment:
+      POSTGRES_USER: community_user
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: community_analytics
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    container_name: community_adminer
+    ports:
+      - "8080:8080"
+volumes:
+  pgdata:
