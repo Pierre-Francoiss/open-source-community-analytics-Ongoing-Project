@@ -33,8 +33,8 @@ POSTGRES_PORT = 5432
 engine = create_engine(
     f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}",
     connect_args={
-        "options": "-c client_encoding=UTF8",
-        "client_encoding": "utf8"
+        "options": "-c client_encoding=ISO-8859-1",
+        "client_encoding": "ISO-8859-1"
     }
 )
 
