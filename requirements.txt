@@ -5,3 +5,4 @@ matplotlib
 networkx
 textblob
 python-dotenv
+urllib.parse

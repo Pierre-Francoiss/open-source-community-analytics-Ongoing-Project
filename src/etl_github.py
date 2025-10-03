@@ -16,6 +16,7 @@ from sqlalchemy import create_engine
 import time
 import os
 from dotenv import load_dotenv
+from urllib.parse import quote_plus
 
 # =========================================================
 # 1. CONFIGURATION
@@ -30,12 +31,13 @@ POSTGRES_PORT = 5432
 
 # Create SQLAlchemy engine for connection
 
+# Encode password safely 
+encoded_password = quote_plus(POSTGRES_PASSWORD)
+
+# Create SQLAlchemy engine
 engine = create_engine(
-    f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}",
-    connect_args={
-        "options": "-c client_encoding=ISO-8859-1",
-        "client_encoding": "ISO-8859-1"
-    }
+    f"postgresql+psycopg2://{POSTGRES_USER}:{encoded_password}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}",
+    client_encoding="utf8"  # Assure que psycopg2 communique en UTF-8
 )
 
 # GitHub API configuration
