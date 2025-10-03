@@ -5,10 +5,10 @@ services:
     container_name: community_postgres
     environment:
       POSTGRES_USER: community_user
-      POSTGRES_PASSWORD: Userpass
+      POSTGRES_PASSWORD: "Userpass"
       POSTGRES_DB: community_analytics
-      LANG: en_US.utf8
-      LC_ALL: en_US.utf8
+      LANG: C
+      LC_ALL: C
 
     ports:
       - "5432:5432"

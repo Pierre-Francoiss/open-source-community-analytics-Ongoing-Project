@@ -5,12 +5,10 @@ try:
         dbname="community_analytics",
         user="community_user",
         password="Userpass",
-        host="localhost",
-        port=5432
+        host="host.docker.internal",
+        port=5432,
     )
-    cur = conn.cursor()
-    cur.execute("SELECT version();")
-    print("✅ Connexion réussie :", cur.fetchone())
-    conn.close()
+    print("✅ Connected")
 except Exception as e:
-    print("❌ Erreur de connexion :", repr(e))
+    print("❌ Erreur brute:", repr(e))
+    print("❌ Erreur texte:", str(e).encode("utf-8", errors="replace"))
