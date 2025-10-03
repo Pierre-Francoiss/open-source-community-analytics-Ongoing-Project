@@ -35,8 +35,7 @@ engine = create_engine(
     connect_args={
         "options": "-c client_encoding=UTF8",
         "client_encoding": "utf8"
-    },
-    encoding='utf-8'
+    }
 )
 
 # GitHub API configuration
