@@ -49,7 +49,7 @@ engine = create_engine(
 
 # GitHub API configuration
 load_dotenv()  # Load environment variables from .env file if present
-GITHUB_USERNAME = "scikit-learn"  # Example organization/user
+GITHUB_USERNAME = "Pierre-Francoiss"  
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")          # Personnal Token to raise rate limits
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
@@ -57,25 +57,40 @@ HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 # 2. HELPER FUNCTIONS
 # =========================================================
 
-def github_get(url, params=None):
+def github_get(url, params=None, max_retries=5):
     
     #Helper function to GET data from GitHub API with basic error handling.
     #Implements simple retry logic in case of temporary errors or rate limits.
     
     all_data = []
     page = 1
+    retries = 0
     while True:
         p = params.copy() if params else {}
         p["per_page"] = 100
         p["page"] = page
 
         response = requests.get(url, headers=HEADERS, params=p)
+
+        # Rate limit exceeded
+        if response.status_code == 403 and "X-RateLimit-Remaining" in response.headers:
+            reset_time = int(response.headers.get("X-RateLimit-Reset", time.time() + 60))
+            sleep_time = max(reset_time - int(time.time()), 1)
+            print(f"Rate limit exceeded. Sleeping for {sleep_time} seconds...")
+            time.sleep(sleep_time)
+            continue
+
         if response.status_code != 200:
             print(f"Error fetching {url}: {response.status_code} - {response.text}")
-            break
+            retries += 1
+            if retries >= max_retries:
+                break
+            print(f"Retrying ({retries}/{max_retries}) in 10 seconds...")
+            time.sleep(10)
+            continue
 
         data = response.json()
-        if not data:  # stop when empty
+        if not data:
             break
 
         all_data.extend(data)
