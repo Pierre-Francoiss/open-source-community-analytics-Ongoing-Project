@@ -23,20 +23,22 @@ from urllib.parse import quote_plus
 # =========================================================
 
 # PostgreSQL connection
-POSTGRES_USER = "community_user"
-POSTGRES_PASSWORD = "Userpass"
-POSTGRES_DB = "community_analytics"
-POSTGRES_HOST = "host.docker.internal"
-POSTGRES_PORT = 5432
+load_dotenv()
+
+POSTGRES_USER = os.getenv("POSTGRES_USER", "community_user")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "Userpass")
+POSTGRES_DB = os.getenv("POSTGRES_DB", "community_analytics")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST", "postgres")
+POSTGRES_PORT = int(os.getenv("POSTGRES_PORT", 5432))
 
 # Create SQLAlchemy engine for connection
 
 # Encode password safely 
 encoded_user = quote_plus(POSTGRES_USER)
 encoded_password = quote_plus(POSTGRES_PASSWORD)
-print(f"Encoded user: {encoded_user}, Encoded password: {encoded_password}")
-for c in POSTGRES_USER + POSTGRES_PASSWORD + POSTGRES_DB:
-    print(ord(c), c)
+#print(f"Encoded user: {encoded_user}, Encoded password: {encoded_password}")
+#for c in POSTGRES_USER + POSTGRES_PASSWORD + POSTGRES_DB:
+    #print(ord(c), c)
 
 
 # Create SQLAlchemy engine
@@ -88,7 +90,7 @@ def df_to_postgres(df, table_name):
     if df.empty:
         print(f"No data to insert for table {table_name}. Skipping.")
         return
-    df.to_sql(table_name, engine, if_exists="replace", index=False)
+    df.to_sql(table_name, engine, if_exists="append", index=False)
     print(f"Inserted {len(df)} rows into table {table_name}.")
 
 # =========================================================
