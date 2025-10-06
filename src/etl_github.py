@@ -199,11 +199,10 @@ def load_table(table_name):
     return pd.read_sql(query, engine)
 
 def write_table(df, table_name):
-    """Insert a DataFrame into PostgreSQL (replace existing data)."""
     if df.empty:
         print(f"No data to insert for {table_name}")
         return
-    df.to_sql(table_name, engine, if_exists="replace", index=False)
+    df.to_sql(table_name, engine, if_exists="append", index=False)
     print(f"{len(df)} rows inserted into {table_name}")
 
 # project table transformations
