@@ -17,10 +17,10 @@ services:
     ports:
       - "8080:8080"
 
-  etl:
+  etl_github:
     build:
       context: ./src
-    container_name: community_etl
+    container_name: community_etl_github
     depends_on:
       - postgres
     environment:
@@ -29,6 +29,8 @@ services:
       POSTGRES_DB: community_analytics
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
+      ETL_SCRIPT: etl_github.py
+
 
 volumes:
   pgdata: {}

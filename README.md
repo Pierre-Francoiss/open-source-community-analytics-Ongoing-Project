@@ -23,7 +23,7 @@ open-source-community-analytics/\
 Python for data ingestion and transformation\
 PostgreSQL for storage and data modeling\
 SQLAlchemy for database interaction\
-Apache Airflow (or Prefect) for orchestration\
+Apache Airflow for orchestration\
 Streamlit for dashboards and visualizations\
 NetworkX for social graph analysis\
 Hugging Face for sentiment analysis\

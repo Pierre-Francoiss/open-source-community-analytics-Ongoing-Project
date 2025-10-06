@@ -17,6 +17,7 @@ import time
 import os
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
+from datetime import datetime
 
 #configurations
 
@@ -185,5 +186,80 @@ for repo in repos_data:
 
 prs_df = pd.DataFrame(prs_list)
 df_to_postgres(prs_df, "pull_requestsraw")
+
+#end of extraction process
+
+#Transformation and loading process
+
+# core functions to load and write tables
+
+def load_table(table_name):
+    """Read a table from PostgreSQL into a pandas DataFrame."""
+    query = f"SELECT * FROM {table_name};"
+    return pd.read_sql(query, engine)
+
+def write_table(df, table_name):
+    """Insert a DataFrame into PostgreSQL (replace existing data)."""
+    if df.empty:
+        print(f"No data to insert for {table_name}")
+        return
+    df.to_sql(table_name, engine, if_exists="replace", index=False)
+    print(f"{len(df)} rows inserted into {table_name}")
+
+# project table transformations
+
+projects_raw = load_table("projects_raw")
+
+if not projects_raw.empty:
+    projects_clean = projects_raw.copy()
+    projects_clean["name_clean"] = projects_clean["name"].str.lower().str.strip()
+
+    # Simple activity level classification (based on update recency)
+    now = pd.Timestamp.now()
+    projects_clean["activity_level"] = projects_clean["updated_at"].apply(
+        lambda d: "active" if (now - pd.to_datetime(d)).days < 180 else "stale"
+    )
+
+    projects_clean["transformed_at"] = datetime.now()
+    write_table(projects_clean, "projects_clean")
+
+# contributors table transformations
+
+contributors_raw = load_table("contributors_raw")
+
+if not contributors_raw.empty:
+    contributors_clean = contributors_raw.copy()
+    contributors_clean["login_clean"] = contributors_clean["login"].str.lower().str.strip()
+    contributors_clean["activity_score"] = 1.0  # Placeholder: can compute later
+    contributors_clean["transformed_at"] = datetime.now()
+    write_table(contributors_clean, "contributors_clean")
+
+#issues table transformations
+
+issues_raw = load_table("issues_raw")
+
+if not issues_raw.empty:
+    issues_clean = issues_raw.copy()
+    issues_clean["title_clean"] = issues_clean["title"].str.lower().str.strip()
+    issues_clean["word_count"] = issues_clean["body"].fillna("").apply(lambda x: len(x.split()))
+    issues_clean["is_closed"] = issues_clean["state"].apply(lambda s: s.lower() == "closed")
+    issues_clean["transformed_at"] = datetime.now()
+    write_table(issues_clean, "issues_clean")
+
+#pull requests table transformations
+
+pulls_raw = load_table("pull_requests_raw")
+
+if not pulls_raw.empty:
+    pulls_clean = pulls_raw.copy()
+    pulls_clean["title_clean"] = pulls_clean["title"].str.lower().str.strip()
+    pulls_clean["is_merged"] = pulls_clean["state"].apply(lambda s: s.lower() == "merged")
+    pulls_clean["transformed_at"] = datetime.now()
+    write_table(pulls_clean, "pull_requests_clean")
+
+#end of transformation process
+
+print("Transformation pipeline completed successfully.")
+
 
 
