@@ -18,9 +18,7 @@ import os
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 
-# =========================================================
-# 1. CONFIGURATION
-# =========================================================
+#configurations
 
 # PostgreSQL connection
 load_dotenv()
@@ -53,9 +51,7 @@ GITHUB_USERNAME = "Pierre-Francoiss"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")          # Personnal Token to raise rate limits
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
-# =========================================================
-# 2. HELPER FUNCTIONS
-# =========================================================
+#Extraction functions
 
 def github_get(url, params=None, max_retries=5):
     
@@ -108,9 +104,7 @@ def df_to_postgres(df, table_name):
     df.to_sql(table_name, engine, if_exists="append", index=False)
     print(f"Inserted {len(df)} rows into table {table_name}.")
 
-# =========================================================
-# 3. EXTRACT: REPOSITORIES
-# =========================================================
+#Extract Projects
 
 repos_url = f"https://api.github.com/users/{GITHUB_USERNAME}/repos"
 repos_data = github_get(repos_url)
@@ -125,11 +119,9 @@ if not projects_df.empty:
     projects_df.rename(columns={"id": "project_id"}, inplace=True)
 
 # Load into PostgreSQL
-df_to_postgres(projects_df, "projects")
+df_to_postgres(projects_df, "projects_raw")
 
-# =========================================================
-# 4. EXTRACT: CONTRIBUTORS
-# =========================================================
+#Excract Contributors
 
 contributors_list = []
 
@@ -147,11 +139,9 @@ contributors_df = pd.DataFrame(contributors_list)
 if not contributors_df.empty:
     contributors_df.drop_duplicates(subset=["github_id"], inplace=True)
 
-df_to_postgres(contributors_df, "contributors")
+df_to_postgres(contributors_df, "contributors_raw")
 
-# =========================================================
-# 5. EXTRACT: ISSUES
-# =========================================================
+#Extract Issues
 
 issues_list = []
 
@@ -172,11 +162,9 @@ for repo in repos_data:
         })
 
 issues_df = pd.DataFrame(issues_list)
-df_to_postgres(issues_df, "issues")
+df_to_postgres(issues_df, "issues_raw")
 
-# =========================================================
-# 6. EXTRACT: PULL REQUESTS
-# =========================================================
+#Extract Pull Requests
 
 prs_list = []
 
@@ -196,11 +184,6 @@ for repo in repos_data:
         })
 
 prs_df = pd.DataFrame(prs_list)
-df_to_postgres(prs_df, "pull_requests")
+df_to_postgres(prs_df, "pull_requestsraw")
 
-# =========================================================
-# 7. NOTES / NEXT STEPS
-# =========================================================
-
-#- This script can be extended to include more data points (e.g., comments, reviews).
 

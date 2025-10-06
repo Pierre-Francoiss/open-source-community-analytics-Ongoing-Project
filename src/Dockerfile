@@ -5,11 +5,11 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copier le script ETL et le fichier requirements
-COPY etl_github.py /app/
+COPY etl_github_extract_rawload.py /app/
 COPY requirements.txt /app/
 
 # Installer les dépendances Python
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Commande par défaut
-CMD ["python", "etl_github.py"]
+CMD ["python", "etl_github_extract_rawload.py"]
