@@ -25,5 +25,3 @@ PostgreSQL for storage and data modeling\
 SQLAlchemy for database interaction\
 Apache Airflow for orchestration\
 Streamlit for dashboards and visualizations\
-NetworkX for social graph analysis\
-Hugging Face for sentiment analysis\
