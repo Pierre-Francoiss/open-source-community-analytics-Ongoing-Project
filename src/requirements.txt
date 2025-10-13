@@ -6,3 +6,4 @@ networkx
 textblob
 python-dotenv
 psycopg2-binary
+airflow

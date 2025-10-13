@@ -31,6 +31,20 @@ services:
       POSTGRES_PORT: 5432
       ETL_SCRIPT: etl_github.py
 
+  airflow:
+    build:
+      context: ./airflow
+    container_name: community_airflow
+    depends_on:
+      etl_github:
+        condition: service_started
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://community_user:Userpass@postgres/community_analytics
+    ports:
+      - "8081:8080"
 
+  
 volumes:
   pgdata: {}
