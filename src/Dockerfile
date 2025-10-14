@@ -4,7 +4,8 @@ FROM python:3.12-slim
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier le script ETL et le fichier requirements
+# Copier le script ETL, l'app streamlit et le fichier requirements
+COPY app_streamlit.py /app/
 COPY etl_github.py /app/
 COPY requirements.txt /app/
 

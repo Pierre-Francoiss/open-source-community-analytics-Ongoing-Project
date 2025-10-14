@@ -18,6 +18,8 @@ POSTGRES_DB = "community_analytics"
 POSTGRES_HOST = "postgres"
 POSTGRES_PORT = "5432"
 
+print("Connexion OK")
+
 # Create SQLAlchemy connection
 engine = create_engine(
     f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
