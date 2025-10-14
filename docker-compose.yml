@@ -47,6 +47,21 @@ services:
         - ./src:/opt/airflow/src        
       command: standalone
 
+  streamlit:
+    build:
+      context: ./src
+    container_name: community_streamlit
+    depends_on:
+      - etl_github
+    environment:
+      POSTGRES_USER: community_user
+      POSTGRES_PASSWORD: Userpass
+      POSTGRES_DB: community_analytics
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    ports:
+      - "8501:8501"
+    command: streamlit run dashboard_app.py --server.port=8501 --server.address=0.0.0.0
 
   
 volumes:
