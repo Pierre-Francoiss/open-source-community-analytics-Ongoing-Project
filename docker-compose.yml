@@ -31,9 +31,9 @@ services:
       POSTGRES_PORT: 5432
       ETL_SCRIPT: etl_github.py
 
-  airflow:
+  airflow-webserver:
       image: apache/airflow:2.9.2
-      container_name: community_airflow
+      container_name: airflow-web
       depends_on:
         - postgres
       environment:
@@ -45,7 +45,22 @@ services:
       volumes:
         - ./src/dags:/opt/airflow/dags 
         - ./src:/opt/airflow/src        
-      command: standalone
+      command: webserver
+
+  airflow-scheduler:
+        image: apache/airflow:2.9.2
+        container_name: airflow-sched
+        depends_on:
+          - postgres
+        environment:
+          - AIRFLOW__CORE__LOAD_EXAMPLES=False
+          - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+          - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://community_user:Userpass@postgres:5432/community_analytics
+        volumes:
+          - ./src/dags:/opt/airflow/dags 
+          - ./src:/opt/airflow/src        
+        command: scheduler
+    
 
   streamlit:
     build:
