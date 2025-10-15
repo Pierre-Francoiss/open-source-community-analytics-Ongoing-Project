@@ -21,5 +21,8 @@ with DAG(
         task_id="run_github_etl",
         bash_command="python /opt/airflow/src/etl_github.py")
     
+    streamlit = BashOperator(
+        task_id="run_streamlit",
+        bash_command="streamlit run /opt/airflow/src/app_streamlit.py --server.port=8501 --server.address=0.0.0.0")
 
-
+    github_etl >> streamlit

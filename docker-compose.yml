@@ -17,37 +17,6 @@ services:
     ports:
       - "8080:8080"
 
-  airflow:
-      image: apache/airflow:2.9.2
-      container_name: community_airflow
-      depends_on:
-        - postgres
-      environment:
-        - AIRFLOW__CORE__LOAD_EXAMPLES=False
-        - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
-        - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://community_user:Userpass@postgres:5432/community_analytics
-      ports:
-        - "8081:8080"
-      volumes:
-        - ./src/dags:/opt/airflow/dags 
-        - ./src:/opt/airflow/src        
-      command: ["bash", "/start_airflow.sh"]
-
-  streamlit:
-    build:
-      context: ./src
-    container_name: community_streamlit
-    depends_on:
-      - etl_github
-    environment:
-      POSTGRES_USER: community_user
-      POSTGRES_PASSWORD: Userpass
-      POSTGRES_DB: community_analytics
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-    ports:
-      - "8501:8501"
-    command: ["streamlit", "run", "app_streamlit.py", "--server.port=8501", "--server.address=0.0.0.0"]
 
   
 volumes:
