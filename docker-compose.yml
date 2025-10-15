@@ -17,20 +17,6 @@ services:
     ports:
       - "8080:8080"
 
-  etl_github:
-    build:
-      context: ./src
-    container_name: community_etl_github
-    depends_on:
-      - postgres
-    environment:
-      POSTGRES_USER: community_user
-      POSTGRES_PASSWORD: Userpass
-      POSTGRES_DB: community_analytics
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      ETL_SCRIPT: etl_github.py
-
   airflow:
       image: apache/airflow:2.9.2
       container_name: community_airflow
