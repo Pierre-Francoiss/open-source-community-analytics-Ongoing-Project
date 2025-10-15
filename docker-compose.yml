@@ -31,7 +31,7 @@ services:
       volumes:
         - ./src/dags:/opt/airflow/dags 
         - ./src:/opt/airflow/src        
-      command: standalone
+      command: ["bash", "/start_airflow.sh"]
 
   streamlit:
     build:
