@@ -17,6 +17,21 @@ services:
     ports:
       - "8080:8080"
 
+  airflow:
+      image: apache/airflow:2.9.2
+      container_name: community_airflow
+      depends_on:
+        - postgres
+      environment:
+        - AIRFLOW__CORE__LOAD_EXAMPLES=False
+        - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+        - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://community_user:Userpass@postgres:5432/community_analytics
+      ports:
+        - "8081:8080"
+      volumes:
+        - ./src/dags:/opt/airflow/dags 
+        - ./src:/opt/airflow/src        
+      command: ["bash", "/start_airflow.sh"]
 
   
 volumes:
