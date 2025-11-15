@@ -48,7 +48,7 @@ engine = create_engine(
 
 # GitHub API configuration
 load_dotenv()  # Load environment variables from .env file if present
-GITHUB_USERNAME = "Pierre-Francoiss"  
+GITHUB_USERNAME = "tristanplx"  
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")          # Personnal Token to raise rate limits
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
