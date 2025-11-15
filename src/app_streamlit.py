@@ -44,6 +44,12 @@ except Exception as e:
     st.error(f"Database connection failed: {e}")
     st.stop()
 
+# Bouton pour recharger immédiatement les données
+if st.button("Refresh data"):
+    st.cache_data.clear()
+    st.rerun()   # recharge l'app immédiatement
+
+
 # ---------------------------------------------------------
 # 3. KPIs
 # ---------------------------------------------------------
